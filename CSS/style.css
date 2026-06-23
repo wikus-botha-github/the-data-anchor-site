@@ -1,17 +1,22 @@
 /* ==========================================================================
-   1. DESIGN TOKENS (VARIABLES) & RESET
+   1. ZEBEYOND-INSPIRED DESIGN SYSTEM (DARK TECH PLATFORM)
    ========================================================================== */
 :root {
-    /* Color Palette - Minimalist & Warm */
-    --primary-dark: #1a1a1a;       /* Deep charcoal for main headings */
-    --text-main: #292929;          /* Readable off-black for body paragraphs */
-    --text-muted: #6b6b6b;         /* Muted gray for tags, dates, and secondary text */
-    --bg-light: #fafafa;           /* Warm ultra-light gray for cards */
-    --border-color: #e6e6e6;       /* Thin elegant borders */
-    --accent: #1a8917;             /* Classic publication accent green (similar to Medium) */
+    /* Color Palette */
+    --bg-main: #020705;           /* Deep slate/forest near-black */
+    --bg-surface: #0a110d;        /* Elevation color for project cards/headers */
+    --border-tech: #172620;       /* Crisp, sharp engineering line borders */
     
-    /* Layout Constants */
-    --max-width: 740px;            /* Ideal line length for comfortable long-form reading */
+    /* Text Color Spectrum */
+    --text-primary: #C4D1CD;      /* Crisp light silver-green for high readability */
+    --text-secondary: #A1B3B0;    /* Muted gray-green for descriptions */
+    --text-dark: #577D80;         /* Deep tone for tags or metadata */
+    
+    /* Neon Tech Accents */
+    --accent-glow: #1DBD9D;       /* Striking cyber mint */
+    --accent-bright: #07CB6C;     /* High-visibility action green */
+    
+    --max-width: 900px;           /* Slightly wider for a dashboard/platform framework appearance */
 }
 
 * {
@@ -21,23 +26,21 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    color: var(--text-main);
-    background-color: #ffffff;
-    line-height: 1.625;            /* Golden ratio line-height for readability */
-    letter-spacing: -0.011em;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "SF Mono", Menlo, Consolas, monospace;
+    color: var(--text-primary);
+    background-color: var(--bg-main);
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
 }
 
 /* ==========================================================================
-   2. SITE HEADERS & NAVIGATION
+   2. HEADER & NAVIGATION (DASHBOARD COMPONENT STYLE)
    ========================================================================== */
 header {
-    border-bottom: 1px solid var(--border-color);
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-tech);
     position: sticky;
     top: 0;
-    background-color: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(8px);    /* Modern blurred-glass header effect */
     z-index: 100;
 }
 
@@ -47,40 +50,55 @@ header {
     align-items: center;
     max-width: var(--max-width);
     margin: 0 auto;
-    padding: 20px;
+    padding: 16px 24px;
 }
 
 .logo {
     font-weight: 700;
-    font-size: 1.2rem;
-    letter-spacing: -0.02em;
-    color: var(--primary-dark);
+    font-size: 1.15rem;
+    letter-spacing: -0.03em;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Added a dynamic tech indicator dot before the text */
+.logo::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: var(--accent-glow);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent-glow);
 }
 
 .nav-links {
     list-style: none;
     display: flex;
-    gap: 24px;
+    gap: 28px;
 }
 
 .nav-links a {
     text-decoration: none;
-    color: var(--text-muted);
-    font-weight: 400;
-    font-size: 0.95rem;
-    transition: color 0.2s ease;
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.25s ease;
 }
 
 .nav-links a:hover {
-    color: var(--primary-dark);
+    color: var(--accent-glow);
 }
 
 /* ==========================================================================
-   3. HERO AREA
+   3. HERO SECTION (PLATFORM SIMULATION SPECS)
    ========================================================================== */
 .hero-section {
-    padding: 60px 20px 40px 20px;
-    border-bottom: 1px solid var(--border-color);
+    padding: 80px 24px 60px 24px;
+    background: radial-gradient(circle at top right, #014B27 0%, transparent 45%);
+    border-bottom: 1px solid var(--border-tech);
 }
 
 .hero-content {
@@ -89,94 +107,116 @@ header {
 }
 
 .hero-content h1 {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
     font-weight: 800;
     letter-spacing: -0.04em;
-    color: var(--primary-dark);
-    line-height: 1.15;
-    margin-bottom: 12px;
+    color: #ffffff;
+    line-height: 1.1;
+    margin-bottom: 16px;
 }
 
 .hero-content p {
-    font-size: 1.15rem;
-    color: var(--text-muted);
-    max-width: 600px;
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    max-width: 640px;
 }
 
 /* ==========================================================================
-   4. CONTENT LAYOUT & CARDS
+   4. DATA ENGINE CARD GRID
    ========================================================================== */
 .content-container {
     max-width: var(--max-width);
     margin: 0 auto;
-    padding: 40px 20px;
+    padding: 60px 24px;
 }
 
 .section-block h2 {
-    font-size: 1.4rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--primary-dark);
-    margin-bottom: 24px;
-    border-left: 3px solid var(--primary-dark);
-    padding-left: 12px;
+    color: var(--text-dark);
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.section-block h2::after {
+    content: '';
+    flex-grow: 1;
+    height: 1px;
+    background-color: var(--border-tech);
 }
 
 .project-card {
-    background-color: var(--bg-light);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 28px;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-tech);
+    border-radius: 8px;
+    padding: 32px;
     margin-bottom: 24px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project-card:hover {
+    border-color: var(--accent-glow);
+    box-shadow: 0 0 15px rgba(29, 189, 157, 0.05);
 }
 
 .category-tag {
     display: inline-block;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--accent);
-    margin-bottom: 8px;
-}
-
-.project-card h3 {
-    font-size: 1.5rem;
+    font-size: 0.7rem;
     font-weight: 700;
-    letter-spacing: -0.02em;
-    color: var(--primary-dark);
-    margin-bottom: 10px;
-}
-
-.project-card p {
-    font-size: 1rem;
-    color: var(--text-main);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-glow);
+    background-color: rgba(29, 189, 157, 0.08);
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid rgba(29, 189, 157, 0.15);
     margin-bottom: 16px;
 }
 
+.project-card h3 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    margin-bottom: 12px;
+}
+
+.project-card p {
+    font-size: 0.98rem;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+}
+
 .read-more {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     text-decoration: none;
-    color: var(--accent);
-    font-weight: 500;
-    font-size: 0.95rem;
+    color: var(--accent-bright);
+    font-weight: 600;
+    font-size: 0.9rem;
+    gap: 6px;
+    transition: gap 0.2s ease;
 }
 
 .read-more:hover {
-    text-decoration: underline;
+    gap: 10px; /* Moves arrow forward smoothly on hover */
 }
 
 /* ==========================================================================
    5. FOOTER
    ========================================================================== */
 footer {
-    border-top: 1px solid var(--border-color);
-    padding: 40px 20px;
+    border-top: 1px solid var(--border-tech);
+    padding: 40px 24px;
     text-align: center;
+    background-color: var(--bg-surface);
 }
 
 footer p {
-    font-size: 0.85rem;
-    color: var(--text-muted);
+    font-size: 0.8rem;
+    color: var(--text-dark);
 }
