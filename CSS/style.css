@@ -220,3 +220,43 @@ footer p {
     font-size: 0.8rem;
     color: var(--text-dark);
 }
+
+/* ==========================================================================
+   6. INTERACTIVE COMPONENT STYLES (FILTERING DASHBOARD)
+   ========================================================================== */
+.filter-controls {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    background-color: var(--bg-surface);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-tech);
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+    color: var(--accent-glow);
+    border-color: var(--accent-glow);
+}
+
+/* When a button is selected, give it the ZeBeyond vibrant glow profile */
+.filter-btn.active {
+    background-color: rgba(29, 189, 157, 0.1);
+    color: #ffffff;
+    border-color: var(--accent-glow);
+    box-shadow: 0 0 10px rgba(29, 189, 157, 0.15);
+}
+
+/* Ensure our cards fade smoothly when toggled */
+.project-card {
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+}
