@@ -260,3 +260,81 @@ footer p {
 .project-card {
     transition: border-color 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
 }
+
+/* ==========================================================================
+   7. NEWSLETTER SUBSCRIPTION MODULE
+   ========================================================================== */
+.newsletter-module {
+    margin-top: 40px;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-tech);
+    border-radius: 8px;
+    padding: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap; /* Wraps cleanly on smaller mobile screens */
+}
+
+.newsletter-text h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+}
+
+.newsletter-text p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.newsletter-form {
+    display: flex;
+    gap: 12px;
+    flex-grow: 1;
+    max-width: 450px;
+}
+
+.newsletter-input {
+    background-color: var(--bg-main);
+    color: #ffffff;
+    border: 1px solid var(--border-tech);
+    padding: 12px 16px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    flex-grow: 1;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Give the input a neon focus halo when clicking inside it */
+.newsletter-input:focus {
+    outline: none;
+    border-color: var(--accent-glow);
+    box-shadow: 0 0 10px rgba(29, 189, 157, 0.15);
+}
+
+.newsletter-submit-btn {
+    background-color: var(--accent-bright);
+    color: var(--bg-main);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.newsletter-submit-btn:hover {
+    background-color: #06b560; /* Slightly darker rich green */
+    box-shadow: 0 0 15px rgba(7, 203, 108, 0.4); /* Vibrant glow footprint */
+    transform: translateY(-1px);
+}
+
+.newsletter-submit-btn:active {
+    transform: translateY(0);
+}
