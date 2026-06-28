@@ -338,3 +338,28 @@ footer p {
 .newsletter-submit-btn:active {
     transform: translateY(0);
 }
+
+/* ==========================================================================
+   BACKGROUND PARTICLE CANVAS INTEGRATION
+   ========================================================================== */
+#particleCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;       /* Places it behind all text layers */
+    pointer-events: none; /* Allows users to still click text or links through the canvas */
+}
+
+/* Ensure our layout components have translucent backdrops so the dots show through */
+body {
+    background-color: var(--bg-main);
+}
+header, .project-card, .newsletter-module {
+    background-color: rgba(10, 17, 13, 0.85) !important; /* Made translucent */
+    backdrop-filter: blur(12px); /* Adds a premium blurred glass background */
+}
+.hero-section {
+    background: radial-gradient(circle at top right, rgba(1, 75, 39, 0.15) 0%, transparent 60%);
+}
