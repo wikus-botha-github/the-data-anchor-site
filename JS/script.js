@@ -35,76 +35,75 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// PARTICLE STARFIELD ENGINE FOR THE DATA ANCHOR
+// ----------------------------------------------------------------------
+// MODULE B: HIGH-FIDELITY FLUID DRIFT MATRIX ENGINE (HERTIE STYLE)
+// ----------------------------------------------------------------------
 const canvas = document.getElementById("particleCanvas");
 if (canvas) {
     const ctx = canvas.getContext("2d");
-
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    const numParticles = 120; // Number of particles active in the matrix
-    const speed = 0.4;        // Subtle, elegant movement speed velocity
+    const numParticles = 100; // Balanced count so it doesn't clutter text legibility
     const particles = [];
 
-    // Track window resizes smoothly
     window.addEventListener("resize", () => {
         width = canvas.width = window.innerWidth;
         height = canvas.height = window.innerHeight;
     });
 
-    // Initialize 3D positions for the particles
+    // Generate particles with unique vectors and wave offsets
     for (let i = 0; i < numParticles; i++) {
         particles.push({
-            x: (Math.random() - 0.5) * width * 2,
-            y: (Math.random() - 0.5) * height * 2,
-            z: Math.random() * width,
-            size: Math.random() * 1.5 + 0.5
+            x: Math.random() * width,
+            y: Math.random() * height,
+            radius: Math.random() * 2 + 0.5,            // Varying particle dimensions
+            speedX: (Math.random() - 0.5) * 0.3,       // Subtle side-to-side drift vector
+            speedY: Math.random() * 0.4 + 0.2,          // Constant forward/downward flow vector
+            opacity: 0,                                 // Start completely hidden
+            maxOpacity: Math.random() * 0.4 + 0.15,     // Soft ambient maximum opacity cap
+            fadeSpeed: Math.random() * 0.01 + 0.005,    // How fast they materialize
+            waveOffset: Math.random() * Math.PI * 2,    // Unique starting point for horizontal oscillation
+            waveSpeed: Math.random() * 0.02 + 0.005     // Speed of the organic fluid sway
         });
     }
 
-    // Mathematical Animation Loop
-    function animateParticles() {
-        // Clear the canvas each frame while maintaining the document's dark color spectrum
+    function renderFluidMatrix() {
         ctx.clearRect(0, 0, width, height);
 
-        const cx = width / 2;
-        const cy = height / 2;
+        particles.forEach(p => {
+            // 1. Advance the vertical coordinate (simulating forward flow)
+            p.y += p.speedY;
+            
+            // 2. Inject an organic horizontal sway using trigonometric wave curves
+            p.waveOffset += p.waveSpeed;
+            const currentX = p.x + Math.sin(p.waveOffset) * 15; // 15px bounding sway width
 
-        particles.forEach((p) => {
-            // Move particle closer to viewer along the Z axis
-            p.z -= speed;
-
-            // If a particle passes the screen plane, recycle it to the back horizon
-            if (p.z <= 0) {
-                p.z = width;
-                p.x = (Math.random() - 0.5) * width * 2;
-                p.y = (Math.random() - 0.5) * height * 2;
+            // 3. Structural Fade-In Execution (Prevents hard popping at horizons)
+            if (p.opacity < p.maxOpacity) {
+                p.opacity += p.fadeSpeed;
             }
 
-            // 3D Perspective Projection Matrix Calculation
-            // Scale increases as depth (z) approaches 0
-            const k = 400 / p.z;
-            const px = p.x * k + cx;
-            const py = p.y * k + cy;
+            // 4. Render Engine Coordinates
+            ctx.beginPath();
+            ctx.arc(currentX, p.y, p.radius, 0, Math.PI * 2);
+            
+            // Utilizing the signature ZeBeyond mint-green token palette mapping
+            ctx.fillStyle = `rgba(29, 189, 157, ${p.opacity})`;
+            ctx.fill();
 
-            // Only draw particles within our view boundaries
-            if (px >= 0 && px <= width && py >= 0 && py <= height) {
-                const currentSize = p.size * k * 0.4;
-                
-                // Set particle styling mimicking the ZeBeyond mint accent color spectrum
-                ctx.beginPath();
-                ctx.arc(px, py, Math.min(currentSize, 3), 0, Math.PI * 2);
-                
-                // Mute transparency based on distance to simulate deep horizon fog
-                const alpha = Math.min(1 - p.z / width, 0.7);
-                ctx.fillStyle = `rgba(29, 189, 157, ${alpha})`;
-                ctx.fill();
+            // 5. Boundary Boundary Reset & recycling logic
+            // If particle glides past the bottom or off the sides, reset to the top horizon boundary safely
+            if (p.y > height || currentX < -20 || currentX > width + 20) {
+                p.y = -10;
+                p.x = Math.random() * width;
+                p.opacity = 0; // Reset opacity to loop the fade-in profile
+                p.waveOffset = Math.random() * Math.PI * 2;
             }
         });
 
-        requestAnimationFrame(animateParticles);
+        requestAnimationFrame(renderFluidMatrix);
     }
 
-    animateParticles();
+    renderFluidMatrix();
 }
