@@ -109,39 +109,58 @@ if (canvas) {
 }
 
 // ----------------------------------------------------------------------
-// MODULE C: DYNAMIC NEWSLETTER SUCCESS STATE INTERACTION
+// MODULE C: CLIENT-TO-EDGE ENDPOINT PIPELINE
 // ----------------------------------------------------------------------
 const newsletterForm = document.getElementById("newsletterForm");
 const newsletterStatus = document.getElementById("newsletterStatus");
 const newsletterEmail = document.getElementById("newsletterEmail");
 
+// Replace this with the live endpoint URL provided by your Supabase deployment output
+const EDGE_FUNCTION_URL = "https://bmfkapdczbtjkaijndto.supabase.co/functions/v1/subscribe-pipeline";
+
 if (newsletterForm && newsletterStatus) {
-    newsletterForm.addEventListener("submit", (event) => {
-        // 1. Prevent the standard browser page refresh action
+    newsletterForm.addEventListener("submit", async (event) => {
         event.preventDefault();
         
-        const capturedEmail = newsletterEmail.value;
+        const capturedEmail = newsletterEmail.value.trim();
 
-        // 2. Fade out the form input and button components smoothly
-        newsletterForm.style.opacity = "0";
-        
-        setTimeout(() => {
-            // Hide the form completely after the fade completes
-            newsletterForm.style.display = "none";
-            
-            // 3. Inject the terminal-style success stream data text
-            newsletterStatus.innerHTML = `
-                <span class="success-code">[SUCCESS]</span> 
-                Stream established for: <span class="success-email">${capturedEmail}</span>. 
-                Welcome to the anchor.
-            `;
-            
-            // 4. Make the message fade in beautifully
-            newsletterStatus.style.display = "block";
-            setTimeout(() => {
-                newsletterStatus.style.opacity = "1";
-            }, 50);
-            
-        }, 300); // Matches the 300ms CSS opacity transition time
+        newsletterForm.style.opacity = "0.5";
+        const submitBtn = newsletterForm.querySelector(".newsletter-submit-btn");
+        if (submitBtn) submitBtn.disabled = true;
+
+        try {
+            // Hit the proxy endpoint directly without attaching raw DB authentication parameters
+            const response = await fetch(EDGE_FUNCTION_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email: capturedEmail })
+            });
+
+            if (response.ok) {
+                newsletterForm.style.opacity = "0";
+                setTimeout(() => {
+                    newsletterForm.style.display = "none";
+                    
+                    newsletterStatus.innerHTML = `
+                        <span class="success-code">[SUCCESS]</span> 
+                        Stream established for: <span class="success-email">${capturedEmail}</span>. 
+                        Data routed via Edge Engine.
+                    `;
+                    newsletterStatus.style.display = "block";
+                    setTimeout(() => { newsletterStatus.style.opacity = "1"; }, 50);
+                }, 300);
+
+            } else {
+                const errorData = await response.json();
+                throw new Error(errorData.error || "Edge transmission rejected.");
+            }
+
+        } catch (error) {
+            newsletterForm.style.opacity = "1";
+            if (submitBtn) submitBtn.disabled = false;
+            alert(`Pipeline Error: ${error.message}`);
+        }
     });
 }
