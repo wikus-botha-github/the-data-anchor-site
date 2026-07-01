@@ -107,3 +107,41 @@ if (canvas) {
 
     renderFluidMatrix();
 }
+
+// ----------------------------------------------------------------------
+// MODULE C: DYNAMIC NEWSLETTER SUCCESS STATE INTERACTION
+// ----------------------------------------------------------------------
+const newsletterForm = document.getElementById("newsletterForm");
+const newsletterStatus = document.getElementById("newsletterStatus");
+const newsletterEmail = document.getElementById("newsletterEmail");
+
+if (newsletterForm && newsletterStatus) {
+    newsletterForm.addEventListener("submit", (event) => {
+        // 1. Prevent the standard browser page refresh action
+        event.preventDefault();
+        
+        const capturedEmail = newsletterEmail.value;
+
+        // 2. Fade out the form input and button components smoothly
+        newsletterForm.style.opacity = "0";
+        
+        setTimeout(() => {
+            // Hide the form completely after the fade completes
+            newsletterForm.style.display = "none";
+            
+            // 3. Inject the terminal-style success stream data text
+            newsletterStatus.innerHTML = `
+                <span class="success-code">[SUCCESS]</span> 
+                Stream established for: <span class="success-email">${capturedEmail}</span>. 
+                Welcome to the anchor.
+            `;
+            
+            // 4. Make the message fade in beautifully
+            newsletterStatus.style.display = "block";
+            setTimeout(() => {
+                newsletterStatus.style.opacity = "1";
+            }, 50);
+            
+        }, 300); // Matches the 300ms CSS opacity transition time
+    });
+}
