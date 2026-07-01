@@ -29,13 +29,11 @@
                     <h3>Subscribe to the Pipeline</h3>
                     <p>Get architectural blueprints and technical content summaries delivered straight to your inbox.</p>
                 </div>
-                <form class="newsletter-form" onsubmit="event.preventDefault();">
-                    <input type="email" placeholder="Enter your email..." class="newsletter-input" required>
+                <form class="newsletter-form" id="newsletterForm">
+                    <input type="email" placeholder="Enter your email..." class="newsletter-input" id="newsletterEmail" required>
                     <button type="submit" class="newsletter-submit-btn">Subscribe</button>
                 </form>
-                
-                <div id="newsletterStatus" class="status-message"></div>
-                
+                <div id="newsletterStatus" class="status-message"></div> 
             </div>
         </div>
     </section>
