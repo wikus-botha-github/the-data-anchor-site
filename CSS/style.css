@@ -398,3 +398,34 @@ header, .project-card, .newsletter-module {
     text-transform: uppercase;
     letter-spacing: 0.02em;
 }
+
+/* ==========================================================================
+   9. DYNAMIC STATUS TRANSITIONS
+   ========================================================================== */
+#newsletterForm {
+    transition: opacity 0.3s ease;
+}
+
+.status-message {
+    display: none;
+    opacity: 0;
+    font-size: 0.95rem;
+    font-family: "SF Mono", Menlo, Consolas, monospace; /* Tech code font look */
+    color: var(--text-primary);
+    transition: opacity 0.3s ease;
+    width: 100%;
+}
+
+/* Neon mint glow indicators matching our design system tokens */
+.success-code {
+    color: var(--accent-bright);
+    font-weight: 700;
+    margin-right: 6px;
+    text-shadow: 0 0 10px rgba(7, 203, 108, 0.3);
+}
+
+.success-email {
+    color: #ffffff;
+    font-weight: 600;
+    border-bottom: 1px dashed var(--accent-glow);
+}
