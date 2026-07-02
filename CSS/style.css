@@ -429,3 +429,17 @@ header, .project-card, .newsletter-module {
     font-weight: 600;
     border-bottom: 1px dashed var(--accent-glow);
 }
+
+/* ==========================================================================
+   10. SUB BUTTON
+   ========================================================================== */
+/* Terminal Blinking Cursor Effect */
+.terminal-blink {
+    animation: blink 0.8s infinite steps(2, start);
+    color: #1DBD9D; /* Matches your accent theme color */
+    margin-left: 4px;
+}
+
+@keyframes blink {
+    to { visibility: hidden; }
+}
