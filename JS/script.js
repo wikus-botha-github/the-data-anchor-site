@@ -109,37 +109,53 @@ if (canvas) {
 }
 
 // ----------------------------------------------------------------------
-// MODULE C: CLIENT-TO-EDGE ENDPOINT PIPELINE
+// MODULE C: CLIENT-TO-EDGE PIPELINE WITH PROGRESSIVE BUTTON STATES
 // ----------------------------------------------------------------------
 const newsletterForm = document.getElementById("newsletterForm");
 const newsletterStatus = document.getElementById("newsletterStatus");
 const newsletterEmail = document.getElementById("newsletterEmail");
 
-// Replace this with the live endpoint URL provided by your Supabase deployment output
+// Replace this with your live endpoint URL from your Supabase deployment output
 const EDGE_FUNCTION_URL = "https://bmfkapdczbtjkaijndto.supabase.co/functions/v1/subscribe-pipeline";
+// Replace this with your actual public anon key string
+const SUPABASE_ANON_KEY = "your-actual-anon-public-key-string";
 
 if (newsletterForm && newsletterStatus) {
     newsletterForm.addEventListener("submit", async (event) => {
         event.preventDefault();
         
         const capturedEmail = newsletterEmail.value.trim();
-
-        newsletterForm.style.opacity = "0.5";
         const submitBtn = newsletterForm.querySelector(".newsletter-submit-btn");
-        if (submitBtn) submitBtn.disabled = true;
+        const originalBtnText = submitBtn ? submitBtn.innerHTML : "Subscribe";
+
+        // PHASE 1: ENTER PROCESSING STATE
+        // Visually dim the form, disable inputs, and change button text to show active pipeline execution
+        newsletterForm.style.opacity = "0.7";
+        if (newsletterEmail) newsletterEmail.disabled = true;
+        
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `PROCESSING <span class="terminal-blink">█</span>`;
+        }
 
         try {
-            // Hit the proxy endpoint directly without attaching raw DB authentication parameters
+            // Hit the proxy endpoint securely passing the project routing keys
             const response = await fetch(EDGE_FUNCTION_URL, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "apikey": SUPABASE_ANON_KEY,
+                    "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
                 },
                 body: JSON.stringify({ email: capturedEmail })
             });
 
+            // PHASE 2: EVALUATE RESPONSE STATES
             if (response.ok) {
+                // SUCCESS TRANSITION
+                if (submitBtn) submitBtn.innerHTML = "SUCCESS // DEPLOYED";
                 newsletterForm.style.opacity = "0";
+                
                 setTimeout(() => {
                     newsletterForm.style.display = "none";
                     
@@ -150,7 +166,7 @@ if (newsletterForm && newsletterStatus) {
                     `;
                     newsletterStatus.style.display = "block";
                     setTimeout(() => { newsletterStatus.style.opacity = "1"; }, 50);
-                }, 300);
+                }, 400);
 
             } else {
                 const errorData = await response.json();
@@ -158,8 +174,16 @@ if (newsletterForm && newsletterStatus) {
             }
 
         } catch (error) {
+            // PHASE 3: ERROR RECOVERY STATE
+            // Re-enable the interactive elements and restore the original button layout text
             newsletterForm.style.opacity = "1";
-            if (submitBtn) submitBtn.disabled = false;
+            if (newsletterEmail) newsletterEmail.disabled = false;
+            
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+            }
+            
             alert(`Pipeline Error: ${error.message}`);
         }
     });
