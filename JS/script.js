@@ -188,3 +188,42 @@ if (newsletterForm && newsletterStatus) {
         }
     });
 }
+
+// ----------------------------------------------------------------------
+// MODULE D: STATE ARCHITECTURE FOR LIGHT/DARK INTERACTION
+// ----------------------------------------------------------------------
+const themeToggle = document.getElementById("themeToggle");
+const modeIcon = themeToggle ? themeToggle.querySelector(".mode-icon") : null;
+
+// 1. INITIALIZE SETTINGS FROM LOCAL STORAGE OR SYSTEM PEEK
+// Checks if the user previously saved a choice, otherwise defaults to dark
+const savedTheme = localStorage.getItem("theme") || "dark";
+document.documentElement.setAttribute("data-theme", savedTheme);
+updateToggleIcon(savedTheme);
+
+if (themeToggle) {
+    themeToggle.addEventListener("click", () => {
+        // Evaluate the active theme parameter state
+        const currentTheme = document.documentElement.getAttribute("data-theme");
+        let newTheme = "dark";
+
+        if (currentTheme === "dark") {
+            newTheme = "light";
+        }
+
+        // 2. MUTATE SYSTEM ATTRIBUTES AND PERSIST DATASTATE
+        document.documentElement.setAttribute("data-theme", newTheme);
+        localStorage.setItem("theme", newTheme);
+        updateToggleIcon(newTheme);
+    });
+}
+
+// Helper function to handle UI asset presentation updates smoothly
+function updateToggleIcon(theme) {
+    if (!modeIcon) return;
+    if (theme === "light") {
+        modeIcon.textContent = "🌙"; // Show moon icon when in light mode
+    } else {
+        modeIcon.textContent = "☀️"; // Show sun icon when in dark mode
+    }
+}
