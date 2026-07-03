@@ -443,3 +443,65 @@ header, .project-card, .newsletter-module {
 @keyframes blink {
     to { visibility: hidden; }
 }
+
+/* ==========================================================================
+   11. THEME PALETTES & COLOR VARIABLES
+   ========================================================================== */
+
+/* Default Dark Mode (The Core Aesthetic) */
+:root {
+    --bg-primary: #020705;
+    --bg-secondary: rgba(10, 17, 13, 0.7);
+    --border-color: #172620;
+    --text-primary: #E2ECE9;
+    --text-secondary: #94A8A5;
+    --text-muted: #41625F;
+    --accent-color: #1DBD9D;
+    --accent-success: #07CB6C;
+}
+
+/* Light Mode Overrides */
+[data-theme="light"] {
+    --bg-primary: #F4F7F6;
+    --bg-secondary: rgba(255, 255, 255, 0.8);
+    --border-color: #C8D5D2;
+    --text-primary: #1A2624;
+    --text-secondary: #4A5F5C;
+    --text-muted: #7A9390;
+    --accent-color: #059679; /* Slightly darker for better contrast on light bg */
+    --accent-success: #048848;
+}
+
+/* Smooth Transitions for Theme Swaps */
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Ensure your existing layout components use these variables! 
+   Example updates for your elements: */
+.newsletter-form {
+    border: 1px solid var(--border-color);
+}
+.newsletter-submit-btn {
+    background-color: var(--accent-color);
+    color: var(--bg-primary);
+}
+.terminal-blink {
+    color: var(--accent-color);
+}
+
+.theme-toggle-btn {
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: monospace;
+    transition: all 0.2s ease;
+}
+.theme-toggle-btn:hover {
+    border-color: var(--accent-color);
+}
