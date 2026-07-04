@@ -492,16 +492,87 @@ body {
     color: var(--accent-color);
 }
 
-.theme-toggle-btn {
-    background: none;
-    border: 1px solid var(--border-color);
-    color: var(--text-primary);
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-family: monospace;
-    transition: all 0.2s ease;
+/* ==========================================================================
+   UPGRADED RADAR TOGGLE SWITCH SYSTEM
+   ========================================================================== */
+
+.theme-switch-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-.theme-toggle-btn:hover {
+
+/* The underlying interactive click container */
+.theme-switch {
+    display: inline-block;
+    height: 28px;
+    position: relative;
+    width: 56px;
+    cursor: pointer;
+}
+
+/* Hide the native browser checkbox, handling input through the wrapper layout */
+.theme-switch input {
+    display: none;
+}
+
+/* The structural sliding track background container */
+.slider-track {
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 6px;
+    font-size: 0.8rem;
+    user-select: none;
+}
+
+/* High-precision mechanical sliding circular element */
+.slider-knob {
+    background-color: var(--text-primary);
+    border-radius: 50%;
+    bottom: 3px;
+    height: 20px;
+    left: 4px;
+    position: absolute;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
+    width: 20px;
+    z-index: 2;
+}
+
+/* Subtly dim the inner inactive symbols */
+.icon-sun, .icon-moon {
+    font-size: 10px;
+    z-index: 1;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+/* Hover highlights to indicate system interaction rules */
+.theme-switch:hover .slider-track {
     border-color: var(--accent-color);
+}
+
+/* --- TOGGLE STATE LOGIC CHANGES --- */
+
+/* Shift the mechanical slider knob to the right when input is checked (Light Mode) */
+input:checked + .slider-track .slider-knob {
+    transform: translateX(26px);
+    background-color: var(--accent-color);
+}
+
+/* Highlight the active target icons dynamically depending on the layout state */
+input:checked + .slider-track .icon-sun {
+    opacity: 1;
+}
+input:not(:checked) + .slider-track .icon-moon {
+    opacity: 1;
 }
