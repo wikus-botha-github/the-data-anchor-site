@@ -1,22 +1,41 @@
 /* ==========================================================================
-   1. ZEBEYOND-INSPIRED DESIGN SYSTEM (DARK TECH PLATFORM)
+   1. CORE DESIGN SYSTEM & THEME ARCHITECTURE
    ========================================================================== */
+
+/* Default Dark Mode Theme State Tokens */
 :root {
-    /* Color Palette */
-    --bg-main: #020705;           /* Deep slate/forest near-black */
-    --bg-surface: #0a110d;        /* Elevation color for project cards/headers */
-    --border-tech: #172620;       /* Crisp, sharp engineering line borders */
+    /* Layout Surfaces */
+    --bg-primary: #020705;           /* Deep slate/forest near-black */
+    --bg-secondary: rgba(10, 17, 13, 0.7); /* Elevation layout surface color */
+    --border-color: #172620;         /* Crisp, sharp engineering line borders */
     
-    /* Text Color Spectrum */
-    --text-primary: #C4D1CD;      /* Crisp light silver-green for high readability */
-    --text-secondary: #A1B3B0;    /* Muted gray-green for descriptions */
-    --text-dark: #577D80;         /* Deep tone for tags or metadata */
+    /* Typography Spectrum */
+    --text-primary: #E2ECE9;         /* Crisp light silver-green for headers */
+    --text-secondary: #94A8A5;       /* Muted gray-green for body copy descriptions */
+    --text-muted: #41625F;           /* Deep tone for tags or metadata */
     
     /* Neon Tech Accents */
-    --accent-glow: #1DBD9D;       /* Striking cyber mint */
-    --accent-bright: #07CB6C;     /* High-visibility action green */
+    --accent-color: #1DBD9D;         /* Striking cyber mint glow */
+    --accent-success: #07CB6C;       /* High-visibility action green */
     
-    --max-width: 900px;           /* Slightly wider for a dashboard/platform framework appearance */
+    --max-width: 900px;
+}
+
+/* Light Mode Overrides (Enhanced Contrast Tuning) */
+[data-theme="light"] {
+    /* Layout Surfaces */
+    --bg-primary: #F4F7F6;
+    --bg-secondary: #E6EDE9;         /* Darkened container backing for layout depth */
+    --border-color: #B2C4C0;          /* Hardened line borders for distinct separation */
+    
+    /* Strict Typography Contrast Fixes */
+    --text-primary: #0B1412;         /* Deep near-black slate for maximum readability */
+    --text-secondary: #2C3E3A;       /* Hard charcoal green for descriptive body copy */
+    --text-muted: #566D69;           /* Legible dark slate for tags and timestamps */
+    
+    /* Neon Tech Accents */
+    --accent-color: #067D64;         /* Darkened emerald green to pass contrast checks */
+    --accent-success: #036C39;
 }
 
 * {
@@ -28,20 +47,41 @@
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "SF Mono", Menlo, Consolas, monospace;
     color: var(--text-primary);
-    background-color: var(--bg-main);
+    background-color: var(--bg-primary);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* --- GLOBAL THEME VARIABLE COUPLING --- */
+h1, h2, h3, .hero-title {
+    color: var(--text-primary);
+    transition: color 0.3s ease;
+}
+
+p, .hero-description, .meta-item {
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
+}
+
+/* For cards/containers that should pop off the main background layout */
+.project-card, .newsletter-module, .form-container {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* ==========================================================================
    2. HEADER & NAVIGATION (DASHBOARD COMPONENT STYLE)
    ========================================================================== */
 header {
-    background-color: var(--bg-surface);
-    border-bottom: 1px solid var(--border-tech);
+    background-color: var(--bg-secondary) !important;
+    border-bottom: 1px solid var(--border-color);
     position: sticky;
     top: 0;
     z-index: 100;
+    backdrop-filter: blur(12px);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .nav-container {
@@ -57,21 +97,22 @@ header {
     font-weight: 700;
     font-size: 1.15rem;
     letter-spacing: -0.03em;
-    color: #ffffff;
+    color: var(--text-primary);
     display: flex;
     align-items: center;
     gap: 8px;
+    transition: color 0.3s ease;
 }
 
-/* Added a dynamic tech indicator dot before the text */
 .logo::before {
     content: '';
     display: inline-block;
     width: 8px;
     height: 8px;
-    background-color: var(--accent-glow);
+    background-color: var(--accent-color);
     border-radius: 50%;
-    box-shadow: 0 0 8px var(--accent-glow);
+    box-shadow: 0 0 8px var(--accent-color);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .nav-links {
@@ -89,7 +130,7 @@ header {
 }
 
 .nav-links a:hover {
-    color: var(--accent-glow);
+    color: var(--accent-color);
 }
 
 /* ==========================================================================
@@ -97,8 +138,9 @@ header {
    ========================================================================== */
 .hero-section {
     padding: 80px 24px 60px 24px;
-    background: radial-gradient(circle at top right, #014B27 0%, transparent 45%);
-    border-bottom: 1px solid var(--border-tech);
+    background: radial-gradient(circle at top right, rgba(1, 75, 39, 0.15) 0%, transparent 60%);
+    border-bottom: 1px solid var(--border-color);
+    transition: border-color 0.3s ease;
 }
 
 .hero-content {
@@ -110,14 +152,12 @@ header {
     font-size: 2.8rem;
     font-weight: 800;
     letter-spacing: -0.04em;
-    color: #ffffff;
     line-height: 1.1;
     margin-bottom: 16px;
 }
 
 .hero-content p {
     font-size: 1.1rem;
-    color: var(--text-secondary);
     max-width: 640px;
 }
 
@@ -135,31 +175,32 @@ header {
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--text-dark);
+    color: var(--text-muted);
     margin-bottom: 32px;
     display: flex;
     align-items: center;
     gap: 12px;
+    transition: color 0.3s ease;
 }
 
 .section-block h2::after {
     content: '';
     flex-grow: 1;
     height: 1px;
-    background-color: var(--border-tech);
+    background-color: var(--border-color);
+    transition: background-color 0.3s ease;
 }
 
 .project-card {
-    background-color: var(--bg-surface);
-    border: 1px solid var(--border-tech);
     border-radius: 8px;
     padding: 32px;
     margin-bottom: 24px;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    backdrop-filter: blur(12px);
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
 }
 
 .project-card:hover {
-    border-color: var(--accent-glow);
+    border-color: var(--accent-color);
     box-shadow: 0 0 15px rgba(29, 189, 157, 0.05);
 }
 
@@ -169,25 +210,24 @@ header {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--accent-glow);
+    color: var(--accent-color);
     background-color: rgba(29, 189, 157, 0.08);
     padding: 4px 10px;
     border-radius: 4px;
     border: 1px solid rgba(29, 189, 157, 0.15);
     margin-bottom: 16px;
+    transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .project-card h3 {
     font-size: 1.6rem;
     font-weight: 700;
     letter-spacing: -0.02em;
-    color: #ffffff;
     margin-bottom: 12px;
 }
 
 .project-card p {
     font-size: 0.98rem;
-    color: var(--text-secondary);
     margin-bottom: 24px;
 }
 
@@ -195,11 +235,11 @@ header {
     display: inline-flex;
     align-items: center;
     text-decoration: none;
-    color: var(--accent-bright);
+    color: var(--accent-success);
     font-weight: 600;
     font-size: 0.9rem;
     gap: 6px;
-    transition: gap 0.2s ease;
+    transition: gap 0.2s ease, color 0.3s ease;
 }
 
 .read-more:hover {
@@ -210,15 +250,18 @@ header {
    5. FOOTER
    ========================================================================== */
 footer {
-    border-top: 1px solid var(--border-tech);
+    border-top: 1px solid var(--border-color);
     padding: 40px 24px;
     text-align: center;
-    background-color: var(--bg-surface);
+    background-color: var(--bg-secondary) !important;
+    backdrop-filter: blur(12px);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 footer p {
     font-size: 0.8rem;
-    color: var(--text-dark);
+    color: var(--text-muted);
+    transition: color 0.3s ease;
 }
 
 /* ==========================================================================
@@ -232,9 +275,9 @@ footer p {
 }
 
 .filter-btn {
-    background-color: var(--bg-surface);
+    background-color: var(--bg-secondary);
     color: var(--text-secondary);
-    border: 1px solid var(--border-tech);
+    border: 1px solid var(--border-color);
     padding: 8px 16px;
     border-radius: 4px;
     font-size: 0.85rem;
@@ -244,21 +287,16 @@ footer p {
 }
 
 .filter-btn:hover {
-    color: var(--accent-glow);
-    border-color: var(--accent-glow);
+    color: var(--accent-color);
+    border-color: var(--accent-color);
 }
 
 /* When a button is selected, give it the ZeBeyond vibrant glow profile */
 .filter-btn.active {
     background-color: rgba(29, 189, 157, 0.1);
-    color: #ffffff;
-    border-color: var(--accent-glow);
+    color: var(--text-primary);
+    border-color: var(--accent-color);
     box-shadow: 0 0 10px rgba(29, 189, 157, 0.15);
-}
-
-/* Ensure our cards fade smoothly when toggled */
-.project-card {
-    transition: border-color 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
 }
 
 /* ==========================================================================
@@ -266,28 +304,25 @@ footer p {
    ========================================================================== */
 .newsletter-module {
     margin-top: 40px;
-    background-color: var(--bg-surface);
-    border: 1px solid var(--border-tech);
     border-radius: 8px;
     padding: 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 24px;
-    flex-wrap: wrap; /* Wraps cleanly on smaller mobile screens */
+    flex-wrap: wrap;
+    backdrop-filter: blur(12px);
 }
 
 .newsletter-text h3 {
     font-size: 1.1rem;
     font-weight: 700;
-    color: #ffffff;
     margin-bottom: 4px;
     letter-spacing: -0.01em;
 }
 
 .newsletter-text p {
     font-size: 0.9rem;
-    color: var(--text-secondary);
 }
 
 .newsletter-form {
@@ -295,30 +330,31 @@ footer p {
     gap: 12px;
     flex-grow: 1;
     max-width: 450px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
 }
 
 .newsletter-input {
-    background-color: var(--bg-main);
-    color: #ffffff;
-    border: 1px solid var(--border-tech);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
     padding: 12px 16px;
     border-radius: 4px;
     font-size: 0.9rem;
     font-family: inherit;
     flex-grow: 1;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Give the input a neon focus halo when clicking inside it */
 .newsletter-input:focus {
     outline: none;
-    border-color: var(--accent-glow);
+    border-color: var(--accent-color);
     box-shadow: 0 0 10px rgba(29, 189, 157, 0.15);
 }
 
 .newsletter-submit-btn {
-    background-color: var(--accent-bright);
-    color: var(--bg-main);
+    background-color: var(--accent-color);
+    color: var(--bg-primary);
     border: none;
     padding: 12px 24px;
     border-radius: 4px;
@@ -330,17 +366,52 @@ footer p {
 }
 
 .newsletter-submit-btn:hover {
-    background-color: #06b560; /* Slightly darker rich green */
-    box-shadow: 0 0 15px rgba(7, 203, 108, 0.4); /* Vibrant glow footprint */
+    box-shadow: 0 0 15px rgba(7, 203, 108, 0.4);
     transform: translateY(-1px);
+    opacity: 0.9;
 }
 
 .newsletter-submit-btn:active {
     transform: translateY(0);
 }
 
+#newsletterForm {
+    transition: opacity 0.3s ease;
+}
+
+.status-message {
+    display: none;
+    opacity: 0;
+    font-size: 0.95rem;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    transition: opacity 0.3s ease;
+    width: 100%;
+}
+
+.success-code {
+    color: var(--accent-success);
+    font-weight: 700;
+    margin-right: 6px;
+    text-shadow: 0 0 10px rgba(7, 203, 108, 0.3);
+}
+
+.success-email {
+    color: var(--text-primary);
+    font-weight: 600;
+    border-bottom: 1px dashed var(--accent-color);
+}
+
+.terminal-blink {
+    animation: blink 0.8s infinite steps(2, start);
+    margin-left: 4px;
+}
+
+@keyframes blink {
+    to { visibility: hidden; }
+}
+
 /* ==========================================================================
-   BACKGROUND PARTICLE CANVAS INTEGRATION
+   8. BACKGROUND PARTICLE CANVAS INTEGRATION
    ========================================================================== */
 #particleCanvas {
     position: fixed;
@@ -348,24 +419,16 @@ footer p {
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: -1;       /* Places it behind all text layers */
-    pointer-events: none; /* Allows users to still click text or links through the canvas */
+    z-index: -1;
+    pointer-events: none; /* Allows users to click through the canvas */
 }
 
-/* Ensure our layout components have translucent backdrops so the dots show through */
-body {
-    background-color: var(--bg-main);
-}
-header, .project-card, .newsletter-module {
-    background-color: rgba(10, 17, 13, 0.85) !important; /* Made translucent */
-    backdrop-filter: blur(12px); /* Adds a premium blurred glass background */
-}
 .hero-section {
     background: radial-gradient(circle at top right, rgba(1, 75, 39, 0.15) 0%, transparent 60%);
 }
 
 /* ==========================================================================
-   8. METADATA & DATA COMPLEXITY BADGES
+   9. METADATA & DATA COMPLEXITY BADGES
    ========================================================================== */
 .card-meta {
     display: flex;
@@ -377,19 +440,15 @@ header, .project-card, .newsletter-module {
     letter-spacing: -0.01em;
 }
 
-.meta-item {
-    color: var(--text-secondary); /* Soft gray-green */
-}
-
 .meta-divider {
-    color: var(--text-dark);      /* Darker tone for separating dots */
+    color: var(--text-muted);
     user-select: none;
+    transition: color 0.3s ease;
 }
 
-/* The specialized technical classification badge */
 .meta-badge {
-    color: #ffffff;
-    background-color: var(--border-tech);
+    color: var(--text-primary);
+    background-color: var(--border-color);
     border: 1px solid rgba(87, 125, 128, 0.3);
     padding: 2px 8px;
     border-radius: 4px;
@@ -397,112 +456,18 @@ header, .project-card, .newsletter-module {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.02em;
+    transition: all 0.3s ease;
 }
 
 /* ==========================================================================
-   9. DYNAMIC STATUS TRANSITIONS
+   10. UPGRADED RADAR TOGGLE SWITCH SYSTEM
    ========================================================================== */
-#newsletterForm {
-    transition: opacity 0.3s ease;
-}
-
-.status-message {
-    display: none;
-    opacity: 0;
-    font-size: 0.95rem;
-    font-family: "SF Mono", Menlo, Consolas, monospace; /* Tech code font look */
-    color: var(--text-primary);
-    transition: opacity 0.3s ease;
-    width: 100%;
-}
-
-/* Neon mint glow indicators matching our design system tokens */
-.success-code {
-    color: var(--accent-bright);
-    font-weight: 700;
-    margin-right: 6px;
-    text-shadow: 0 0 10px rgba(7, 203, 108, 0.3);
-}
-
-.success-email {
-    color: #ffffff;
-    font-weight: 600;
-    border-bottom: 1px dashed var(--accent-glow);
-}
-
-/* ==========================================================================
-   10. SUB BUTTON
-   ========================================================================== */
-/* Terminal Blinking Cursor Effect */
-.terminal-blink {
-    animation: blink 0.8s infinite steps(2, start);
-    color: #1DBD9D; /* Matches your accent theme color */
-    margin-left: 4px;
-}
-
-@keyframes blink {
-    to { visibility: hidden; }
-}
-
-/* ==========================================================================
-   11. THEME PALETTES & COLOR VARIABLES
-   ========================================================================== */
-
-/* Default Dark Mode (The Core Aesthetic) */
-:root {
-    --bg-primary: #020705;
-    --bg-secondary: rgba(10, 17, 13, 0.7);
-    --border-color: #172620;
-    --text-primary: #E2ECE9;
-    --text-secondary: #94A8A5;
-    --text-muted: #41625F;
-    --accent-color: #1DBD9D;
-    --accent-success: #07CB6C;
-}
-
-/* Light Mode Overrides */
-[data-theme="light"] {
-    --bg-primary: #F4F7F6;
-    --bg-secondary: rgba(255, 255, 255, 0.8);
-    --border-color: #C8D5D2;
-    --text-primary: #1A2624;
-    --text-secondary: #4A5F5C;
-    --text-muted: #7A9390;
-    --accent-color: #059679; /* Slightly darker for better contrast on light bg */
-    --accent-success: #048848;
-}
-
-/* Smooth Transitions for Theme Swaps */
-body {
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-}
-
-/* Ensure your existing layout components use these variables! 
-   Example updates for your elements: */
-.newsletter-form {
-    border: 1px solid var(--border-color);
-}
-.newsletter-submit-btn {
-    background-color: var(--accent-color);
-    color: var(--bg-primary);
-}
-.terminal-blink {
-    color: var(--accent-color);
-}
-
-/* ==========================================================================
-   UPGRADED RADAR TOGGLE SWITCH SYSTEM
-   ========================================================================== */
-
 .theme-switch-wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-/* The underlying interactive click container */
 .theme-switch {
     display: inline-block;
     height: 28px;
@@ -511,12 +476,10 @@ body {
     cursor: pointer;
 }
 
-/* Hide the native browser checkbox, handling input through the wrapper layout */
 .theme-switch input {
     display: none;
 }
 
-/* The structural sliding track background container */
 .slider-track {
     background-color: var(--bg-primary);
     border: 1px solid var(--border-color);
@@ -535,7 +498,6 @@ body {
     user-select: none;
 }
 
-/* High-precision mechanical sliding circular element */
 .slider-knob {
     background-color: var(--text-primary);
     border-radius: 50%;
@@ -548,7 +510,6 @@ body {
     z-index: 2;
 }
 
-/* Subtly dim the inner inactive symbols */
 .icon-sun, .icon-moon {
     font-size: 10px;
     z-index: 1;
@@ -556,23 +517,19 @@ body {
     transition: opacity 0.2s ease;
 }
 
-/* Hover highlights to indicate system interaction rules */
 .theme-switch:hover .slider-track {
     border-color: var(--accent-color);
 }
 
-/* --- TOGGLE STATE LOGIC CHANGES --- */
-
-/* Shift the mechanical slider knob to the right when input is checked (Light Mode) */
 input:checked + .slider-track .slider-knob {
     transform: translateX(26px);
     background-color: var(--accent-color);
 }
 
-/* Highlight the active target icons dynamically depending on the layout state */
 input:checked + .slider-track .icon-sun {
     opacity: 1;
 }
+
 input:not(:checked) + .slider-track .icon-moon {
     opacity: 1;
 }
