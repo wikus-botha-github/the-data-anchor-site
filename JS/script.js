@@ -190,40 +190,30 @@ if (newsletterForm && newsletterStatus) {
 }
 
 // ----------------------------------------------------------------------
-// MODULE D: STATE ARCHITECTURE FOR LIGHT/DARK INTERACTION
+// MODULE D: STATE ARCHITECTURE FOR PERSISTENT SLIDER TOGGLE SWITCH
 // ----------------------------------------------------------------------
-const themeToggle = document.getElementById("themeToggle");
-const modeIcon = themeToggle ? themeToggle.querySelector(".mode-icon") : null;
+const themeCheckbox = document.getElementById("themeToggle");
 
-// 1. INITIALIZE SETTINGS FROM LOCAL STORAGE OR SYSTEM PEEK
-// Checks if the user previously saved a choice, otherwise defaults to dark
-const savedTheme = localStorage.getItem("theme") || "dark";
-document.documentElement.setAttribute("data-theme", savedTheme);
-updateToggleIcon(savedTheme);
+if (themeCheckbox) {
+    // 1. READ ENVIRONMENT CONSTANTS UPON RUNTIME BOOT
+    const savedTheme = localStorage.getItem("theme") || "dark";
+    
+    // Set the initial document node wrapper flag configuration
+    document.documentElement.setAttribute("data-theme", savedTheme);
+    
+    // Check the box if the active theme is light, leave unchecked if dark
+    themeCheckbox.checked = (savedTheme === "light");
 
-if (themeToggle) {
-    themeToggle.addEventListener("click", () => {
-        // Evaluate the active theme parameter state
-        const currentTheme = document.documentElement.getAttribute("data-theme");
+    // 2. LISTEN FOR SWITCH MUTATION STATE CHANGES
+    themeCheckbox.addEventListener("change", () => {
         let newTheme = "dark";
-
-        if (currentTheme === "dark") {
+        
+        if (themeCheckbox.checked) {
             newTheme = "light";
         }
 
-        // 2. MUTATE SYSTEM ATTRIBUTES AND PERSIST DATASTATE
+        // Apply changes directly to the layout node and save settings
         document.documentElement.setAttribute("data-theme", newTheme);
         localStorage.setItem("theme", newTheme);
-        updateToggleIcon(newTheme);
     });
-}
-
-// Helper function to handle UI asset presentation updates smoothly
-function updateToggleIcon(theme) {
-    if (!modeIcon) return;
-    if (theme === "light") {
-        modeIcon.textContent = "🌙"; // Show moon icon when in light mode
-    } else {
-        modeIcon.textContent = "☀️"; // Show sun icon when in dark mode
-    }
 }
