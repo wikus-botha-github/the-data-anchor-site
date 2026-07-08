@@ -118,7 +118,7 @@ const newsletterEmail = document.getElementById("newsletterEmail");
 // Replace this with your live endpoint URL from your Supabase deployment output
 const EDGE_FUNCTION_URL = "https://bmfkapdczbtjkaijndto.supabase.co/functions/v1/subscribe-pipeline";
 // Replace this with your actual public anon key string
-const SUPABASE_ANON_KEY = "your-actual-anon-public-key-string";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtZmthcGRjemJ0amthaWpuZHRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0Mjk3OTgsImV4cCI6MjA5NzAwNTc5OH0.Zf_3RupNaqXdXjooFfZZ9eQkGygJMr6ieGUzPgIQCiA";
 
 if (newsletterForm && newsletterStatus) {
     newsletterForm.addEventListener("submit", async (event) => {
