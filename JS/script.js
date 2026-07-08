@@ -263,11 +263,11 @@ if (fileInput) {
 
             // 1. Direct fetch payload upload configuration straight to your Supabase Storage
             // NOTE: In production tracking environments, configure authentication headers
-            const storageResponse = await fetch(`https://bmfkapdczbtjkaijndto.supabase.co/storage/v1/object/invoice-vault/${uniquePath}`, {
+            const storageResponse = await fetch(`https://your-actual-id.supabase.co/storage/v1/object/invoice-vault/${uniquePath}`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': 'Bearer your-public-anon-key',
-                    'apikey': 'your-public-anon-key',
+                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, // Uses your real key variable
+                    'apikey': SUPABASE_ANON_KEY,                 // Uses your real key variable
                     'Content-Type': file.type
                 },
                 body: file
@@ -281,9 +281,9 @@ if (fileInput) {
             const pipelineResponse = await fetch(`https://bmfkapdczbtjkaijndto.supabase.co/functions/v1/process-invoice`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer your-public-anon-key',
-                    'apikey': 'your-public-anon-key'
+                    "Content-Type": "application/json",
+                    "apikey": SUPABASE_ANON_KEY,
+                    "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
                 },
                 body: JSON.stringify({ storagePath: uniquePath, fileName: file.name })
             });
