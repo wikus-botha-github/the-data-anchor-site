@@ -217,3 +217,91 @@ if (themeCheckbox) {
         localStorage.setItem("theme", newTheme);
     });
 }
+
+// ----------------------------------------------------------------------
+// MODULE E: INTELLIGENT INVOICING APP ROUTING & UPLOAD CONTROLLER
+// ----------------------------------------------------------------------
+document.querySelectorAll('.tab-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        // Handle Active Link Highlights
+        document.querySelectorAll('.tab-link').forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+
+        // Toggle Content Panes Based on Selected Data Attributes
+        const targetTab = link.getAttribute('data-tab');
+        const homeContent = document.querySelector('.hero-section, .content-container');
+        const invoiceContent = document.getElementById('invoicingTab');
+
+        if (targetTab === 'invoicing') {
+            if (homeContent) homeContent.style.display = 'none';
+            if (invoiceContent) invoiceContent.style.display = 'block';
+        } else {
+            if (homeContent) homeContent.style.display = 'block';
+            if (invoiceContent) invoiceContent.style.display = 'none';
+        }
+    });
+});
+
+// FILE INGESTION AND PIPELINE TRIGGER TRANSACTION MANAGER
+const fileInput = document.getElementById('invoiceFileDrop');
+const statusText = document.getElementById('uploadStatusText');
+const jsonLedger = document.getElementById('invoiceExtractionLedger');
+const jsonOutput = document.getElementById('jsonTerminalOutput');
+
+if (fileInput) {
+    fileInput.addEventListener('change', async () => {
+        if (!fileInput.files.length) return;
+        const file = fileInput.files[0];
+        
+        statusText.innerHTML = `[ UPLOADING ] Committing asset data stream to bucket...`;
+        
+        try {
+            const fileExt = file.name.split('.').pop();
+            const uniquePath = `invoices/${crypto.randomUUID()}.${fileExt}`;
+
+            // 1. Direct fetch payload upload configuration straight to your Supabase Storage
+            // NOTE: In production tracking environments, configure authentication headers
+            const storageResponse = await fetch(`https://your-project-id.supabase.co/storage/v1/object/invoice-vault/${uniquePath}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer your-public-anon-key',
+                    'apikey': 'your-public-anon-key',
+                    'Content-Type': file.type
+                },
+                body: file
+            });
+
+            if (!storageResponse.ok) throw new Error("Storage cluster reject mapping transaction.");
+
+            // 2. TRIGGER THE INTELLIGENT COMPILATION PIPELINE EDGE FUNCTION
+            statusText.innerHTML = `[ EXTRACTION_ACTIVE ] Querying visual model data boundaries... <span class="terminal-blink">█</span>`;
+            
+            const pipelineResponse = await fetch(`https://your-project-id.supabase.co/functions/v1/process-invoice`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer your-public-anon-key',
+                    'apikey': 'your-public-anon-key'
+                },
+                body: JSON.stringify({ storagePath: uniquePath, fileName: file.name })
+            });
+
+            const pipelineResult = await pipelineResponse.json();
+
+            if (pipelineResponse.ok) {
+                statusText.innerHTML = `[ STATUS_OK ] Document compiled and committed safely.`;
+                if (jsonLedger && jsonOutput) {
+                    jsonLedger.style.display = 'block';
+                    jsonOutput.textContent = JSON.stringify(pipelineResult.data, null, 2);
+                }
+            } else {
+                throw new Error(pipelineResult.error || "Extraction execution interrupted.");
+            }
+
+        } catch (err) {
+            statusText.innerHTML = `[ EXEC_ERROR ] Pipeline trace failure: ${err.message}`;
+        }
+    });
+}
