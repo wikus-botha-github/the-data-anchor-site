@@ -260,14 +260,23 @@ if (fileInput) {
         statusText.innerHTML = `[ UPLOADING ] Committing asset data stream to bucket...`;
         
         try {
-            const fileExt = file.name.split('.').pop();
+            const fileExt = file.name.split('.').pop().toLowerCase();
             const uniquePath = `invoices/${crypto.randomUUID()}.${fileExt}`;
 
-            // 1. UPLOAD VIA BROWSER CLIENT CONTEXT LAYER
+            // SAFE TYPE OVERRIDE: Protects image formats from local browser protocol drops
+            let forcedMimeType = file.type;
+            if (!forcedMimeType || forcedMimeType === "") {
+                if (fileExt === 'png') forcedMimeType = 'image/png';
+                else if (fileExt === 'jpg' || fileExt === 'jpeg') forcedMimeType = 'image/jpeg';
+                else if (fileExt === 'pdf') forcedMimeType = 'application/pdf';
+            }
+
+            // 1. UPLOAD VIA BROWSER CLIENT CONTEXT LAYER WITH EXPLICIT CONTENT TYPE
             const { data: storageData, error: storageError } = await supabaseBrowserClient
                 .storage
                 .from('invoice-vault')
                 .upload(uniquePath, file, {
+                    contentType: forcedMimeType,
                     cacheControl: '3600',
                     upsert: false
                 });
@@ -283,7 +292,10 @@ if (fileInput) {
                     body: { storagePath: uniquePath, fileName: file.name }
                 });
 
-            if (functionError) throw new Error(`AI Extraction Pipeline error: ${functionError.message}`);
+            if (functionError) {
+                const serverErrorMessage = functionError.context?.message || functionError.message || "Extraction Pipeline Fault";
+                throw new Error(serverErrorMessage);
+            }
 
             // 3. RENDER DYNAMIC RETURN DATA SCHEMA OUTPUT
             statusText.innerHTML = `[ STATUS_OK ] Document compiled and committed safely.`;
