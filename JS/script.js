@@ -263,7 +263,7 @@ if (fileInput) {
 
             // 1. Direct fetch payload upload configuration straight to your Supabase Storage
             // NOTE: In production tracking environments, configure authentication headers
-            const storageResponse = await fetch(`https://your-actual-id.supabase.co/storage/v1/object/invoice-vault/${uniquePath}`, {
+            const storageResponse = await fetch(`https://bmfkapdczbtjkaijndto.supabase.co/storage/v1/object/invoice-vault/${uniquePath}`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, // Uses your real key variable
