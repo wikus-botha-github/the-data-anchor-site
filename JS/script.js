@@ -219,17 +219,15 @@ if (themeCheckbox) {
 }
 
 // ----------------------------------------------------------------------
-// MODULE E: INTELLIGENT INVOICING APP ROUTING & UPLOAD CONTROLLER
+// MODULE E: INTELLIGENT INVOICING - FILE PROTOCOL DIRECT WORKSPACE
 // ----------------------------------------------------------------------
 document.querySelectorAll('.tab-link').forEach(link => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
         
-        // Handle Active Link Highlights
         document.querySelectorAll('.tab-link').forEach(l => l.classList.remove('active'));
         link.classList.add('active');
 
-        // Toggle Content Panes Based on Selected Data Attributes
         const targetTab = link.getAttribute('data-tab');
         const homeContent = document.querySelector('.hero-section, .content-container');
         const invoiceContent = document.getElementById('invoicingTab');
@@ -244,7 +242,11 @@ document.querySelectorAll('.tab-link').forEach(link => {
     });
 });
 
-// FILE INGESTION AND PIPELINE TRIGGER TRANSACTION MANAGER
+// INITIALIZE GLOBAL CDN CLIENT DISPATCHER
+// Note: Ensure SUPABASE_ANON_KEY is initialized at the top of your script file!
+const _supabaseProjectUrl = "https://bmfkapdczbtjkaijndto.supabase.co";
+const supabaseBrowserClient = window.supabase.createClient(_supabaseProjectUrl, SUPABASE_ANON_KEY);
+
 const fileInput = document.getElementById('invoiceFileDrop');
 const statusText = document.getElementById('uploadStatusText');
 const jsonLedger = document.getElementById('invoiceExtractionLedger');
@@ -261,46 +263,37 @@ if (fileInput) {
             const fileExt = file.name.split('.').pop();
             const uniquePath = `invoices/${crypto.randomUUID()}.${fileExt}`;
 
-            // 1. Direct fetch payload upload configuration straight to your Supabase Storage
-            // NOTE: In production tracking environments, configure authentication headers
-            const storageResponse = await fetch(`https://bmfkapdczbtjkaijndto.supabase.co/storage/v1/object/invoice-vault/${uniquePath}`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, // Uses your real key variable
-                    'apikey': SUPABASE_ANON_KEY,                 // Uses your real key variable
-                    'Content-Type': file.type
-                },
-                body: file
-            });
+            // 1. UPLOAD VIA BROWSER CLIENT CONTEXT LAYER
+            const { data: storageData, error: storageError } = await supabaseBrowserClient
+                .storage
+                .from('invoice-vault')
+                .upload(uniquePath, file, {
+                    cacheControl: '3600',
+                    upsert: false
+                });
 
-            if (!storageResponse.ok) throw new Error("Storage cluster reject mapping transaction.");
+            if (storageError) throw new Error(`Storage cluster error: ${storageError.message}`);
 
-            // 2. TRIGGER THE INTELLIGENT COMPILATION PIPELINE EDGE FUNCTION
+            // 2. DISPATCH CALL TO THE PROCESSING EDGE FUNCTION ENGINE
             statusText.innerHTML = `[ EXTRACTION_ACTIVE ] Querying visual model data boundaries... <span class="terminal-blink">█</span>`;
             
-            const pipelineResponse = await fetch(`https://bmfkapdczbtjkaijndto.supabase.co/functions/v1/process-invoice`, {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                    "apikey": SUPABASE_ANON_KEY,
-                    "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
-                },
-                body: JSON.stringify({ storagePath: uniquePath, fileName: file.name })
-            });
+            const { data: functionData, error: functionError } = await supabaseBrowserClient
+                .functions
+                .invoke('process-invoice', {
+                    body: { storagePath: uniquePath, fileName: file.name }
+                });
 
-            const pipelineResult = await pipelineResponse.json();
+            if (functionError) throw new Error(`AI Extraction Pipeline error: ${functionError.message}`);
 
-            if (pipelineResponse.ok) {
-                statusText.innerHTML = `[ STATUS_OK ] Document compiled and committed safely.`;
-                if (jsonLedger && jsonOutput) {
-                    jsonLedger.style.display = 'block';
-                    jsonOutput.textContent = JSON.stringify(pipelineResult.data, null, 2);
-                }
-            } else {
-                throw new Error(pipelineResult.error || "Extraction execution interrupted.");
+            // 3. RENDER DYNAMIC RETURN DATA SCHEMA OUTPUT
+            statusText.innerHTML = `[ STATUS_OK ] Document compiled and committed safely.`;
+            if (jsonLedger && jsonOutput) {
+                jsonLedger.style.display = 'block';
+                jsonOutput.textContent = JSON.stringify(functionData.data || functionData, null, 2);
             }
 
         } catch (err) {
+            console.error("Local Sandbox Pipeline Trace Log:", err);
             statusText.innerHTML = `[ EXEC_ERROR ] Pipeline trace failure: ${err.message}`;
         }
     });
