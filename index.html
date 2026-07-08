@@ -8,13 +8,15 @@
 </head>
 <body>
     <canvas id="particleCanvas"></canvas>
+    
     <header>
         <nav class="nav-container">
             <div class="logo">The Data Anchor</div>
             <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html" class="tab-link active" data-tab="home">Home</a></li>
                 <li><a href="projects.html">Projects</a></li>
                 <li><a href="lessons.html">Lessons Learnt</a></li>
+                <li><a href="#invoicing" class="tab-link" data-tab="invoicing">Intelligent Invoicing</a></li>
             </ul>
             <div class="theme-switch-wrapper">
                 <label class="theme-switch" for="themeToggle">
@@ -29,53 +31,76 @@
         </nav>
     </header>
 
-    <section class="hero-section">
-        <div class="hero-content">
-            <h1>Anchoring Enterprise Data & AI</h1>
-            <p>Documenting frameworks, data governance paradigms, hardware experiments, and lessons learned from building resilient data solutions.</p>
-            
-            <div class="newsletter-module">
-                <div class="newsletter-text">
-                    <h3>Subscribe to the Pipeline</h3>
-                    <p>Get architectural blueprints and technical content summaries delivered straight to your inbox.</p>
-                </div>
-                <form class="newsletter-form" id="newsletterForm">
-                    <input type="email" placeholder="Enter your email..." class="newsletter-input" id="newsletterEmail" required>
-                    <button type="submit" class="newsletter-submit-btn">Subscribe</button>
-                </form>
-                <div id="newsletterStatus" class="status-message"></div> 
-            </div>
-        </div>
-    </section>
-
-    <main class="content-container">
-        
-        <section id="projects" class="section-block">
-            <h2>Featured Projects</h2>
-            
-            <article class="project-card" data-category="hardware">
-                <span class="category-tag">Hardware & IoT Pipelines</span>
+    <div id="homeTab">
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1>Anchoring Enterprise Data & AI</h1>
+                <p>Documenting frameworks, data governance paradigms, hardware experiments, and lessons learned from building resilient data solutions.</p>
                 
-                <div class="card-meta">
-                    <span class="meta-item">June 2026</span>
-                    <span class="meta-divider">&bull;</span>
-                    <span class="meta-item">4 min read</span>
-                    <span class="meta-divider">&bull;</span>
-                    <span class="meta-badge">Pipeline Tier-1</span>
+                <div class="newsletter-module">
+                    <div class="newsletter-text">
+                        <h3>Subscribe to the Pipeline</h3>
+                        <p>Get architectural blueprints and technical content summaries delivered straight to your inbox.</p>
+                    </div>
+                    <form class="newsletter-form" id="newsletterForm">
+                        <input type="email" placeholder="Enter your email..." class="newsletter-input" id="newsletterEmail" required>
+                        <button type="submit" class="newsletter-submit-btn">Subscribe</button>
+                    </form>
+                    <div id="newsletterStatus" class="status-message"></div> 
                 </div>
-                <h3>Environmental Sensor Data Pipeline</h3>
-                <p>Capturing physical environmental metrics using local hardware sensors, executing serial data logging via Python, and structuring data outputs into clean analytical formats.</p>
-                <a href="#" class="read-more">View Technical Documentation &rarr;</a>
-            </article>
+            </div>
         </section>
 
-    </main>
+        <main class="content-container">
+            <section id="projects" class="section-block">
+                <h2>Featured Projects</h2>
+                
+                <article class="project-card" data-category="hardware">
+                    <span class="category-tag">Hardware & IoT Pipelines</span>
+                    
+                    <div class="card-meta">
+                        <span class="meta-item">June 2026</span>
+                        <span class="meta-divider">&bull;</span>
+                        <span class="meta-item">4 min read</span>
+                        <span class="meta-divider">&bull;</span>
+                        <span class="meta-badge">Pipeline Tier-1</span>
+                    </div>
+                    <h3>Environmental Sensor Data Pipeline</h3>
+                    <p>Capturing physical environmental metrics using local hardware sensors, executing serial data logging via Python, and structuring data outputs into clean analytical formats.</p>
+                    <a href="#" class="read-more">View Technical Documentation &rarr;</a>
+                </article>
+            </section>
+        </main>
+    </div>
+
+    <div id="invoicingTab" style="display: none;">
+        <main class="content-container">
+            <section class="section-block">
+                <h2>[ ENGINE_STREAM ] // Automated Document Extraction</h2>
+                
+                <div class="project-card" style="margin-top: 24px;">
+                    <h3 style="margin-bottom: 12px;">Upload Document Asset</h3>
+                    <p style="margin-bottom: 24px; font-size: 0.9rem;">Drop unmapped vendor invoices here. The pipeline passes binary streams to raw schema engines directly—zero static templates required.</p>
+                    
+                    <div class="upload-dropzone" style="border: 2px dashed var(--border-color); padding: 50px; text-align: center; border-radius: 6px; background-color: var(--bg-primary);">
+                        <input type="file" id="invoiceFileDrop" accept="application/pdf,image/*" style="display: none;" />
+                        <button type="button" class="filter-btn" onclick="document.getElementById('invoiceFileDrop').click()">Select Invoice File</button>
+                        <p id="uploadStatusText" style="margin-top: 16px; font-size: 0.85rem; color: var(--text-secondary); font-family: monospace;">Awaiting file attachment payload...</p>
+                    </div>
+                </div>
+
+                <div id="invoiceExtractionLedger" style="display: none;" class="project-card">
+                    <h3 style="font-size: 1.1rem; letter-spacing: -0.01em;">Extracted Structural JSON System Record</h3>
+                    <pre id="jsonTerminalOutput" style="background-color: var(--bg-primary); padding: 20px; border-radius: 6px; overflow-x: auto; color: var(--accent-color); font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 0.85rem; margin-top: 16px; border: 1px solid var(--border-color); line-height: 1.4;"></pre>
+                </div>
+            </section>
+        </main>
+    </div>
 
     <footer>
         <p>&copy; 2026 The Data Anchor. All rights reserved.</p>
     </footer>
 
     <script src="JS/script.js"></script>
-    
 </body>
 </html>
